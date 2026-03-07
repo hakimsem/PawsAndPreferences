@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator, FlatList, TouchableOpacity, Animated, Alert } from 'react-native';
-import Swiper from 'react-native-deck-swiper';
+import React, { useState } from 'react';
+import { Text, ActivityIndicator, Animated, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from '../styles/appStyles';
 import useCats from '../hooks/useCats';
 import SummaryScreen from './SummaryScreen';
+import CatSwiper from '../components/CatSwiper';
+import FooterControls from '../components/FooterControls';
+import FeedbackOverlay from '../components/FeedbackOverlay';
 
 const FOOTER_HEIGHT = 90;
 const positiveWords = ['Cute', 'Wonderful', 'Nice', 'Lovely', 'Adorable', 'Sweet'];
@@ -129,79 +131,34 @@ export default function HomeScreen() {
         ]}
       >
 
-        <Swiper
-          cards={cats}
-          renderCard={(card) => (
-            <View style={styles.card}>
-              <Image
-                source={{ uri: `https://cataas.com/cat/${card.id}` }}
-                style={styles.image}
-              />
-            </View>
-          )}
-          onSwipedLeft={() => {
-            onSwiped('left');
-            showSwipeFeedback('left');
-          }}
-          onSwipedRight={(index) => {
-            onSwipedRight(index);
-            onSwiped('right');
-            showSwipeFeedback('right');
-          }}
-          onSwipedAll={() => setShowSummary(true)}
-          onSwiping={handleSwiping}
-          onDragReleased={() => setSwipeDir(null)}
-          cardIndex={0}
-          backgroundColor={'transparent'}
-          stackSize={3}
-        />
+        <CatSwiper
+  cats={cats}
+  onSwipedLeft={() => {
+    onSwiped('left');
+    showSwipeFeedback('left');
+  }}
+  onSwipedRight={(index) => {
+    onSwipedRight(index);
+    onSwiped('right');
+    showSwipeFeedback('right');
+  }}
+  onSwipedAll={() => setShowSummary(true)}
+  onSwiping={handleSwiping}
+  onDragReleased={() => setSwipeDir(null)}
+/>
 
-        {feedbackText !== '' && (
-          <Animated.View style={{ opacity: fadeAnim }}>
-            <Text style={styles.feedbackOverlay}>
-              {feedbackText}
-            </Text>
-          </Animated.View>
-        )}
+<FeedbackOverlay
+  feedbackText={feedbackText}
+  fadeAnim={fadeAnim}
+/>
       </SafeAreaView>
 
-      <View
-        style={[
-          styles.footer,
-          { paddingBottom: insets.bottom }
-        ]}
-      >
-
-        <View style={[
-          styles.badge,
-          styles.dislikeBadge,
-          (swipeDir === 'left' || flashDir === 'left') && styles.dislikeGlow
-        ]}>
-          <Text style={[
-            styles.dislikeText,
-            (swipeDir === 'left' || flashDir === 'left') && styles.whiteText
-          ]}>✕</Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.favouriteButton}
-          onPress={() => setShowSummary(true)}
-        >
-          <Text style={styles.favouriteText}>📝 Summary</Text>
-        </TouchableOpacity>
-
-        <View style={[
-          styles.badge,
-          styles.likeBadge,
-          (swipeDir === 'right' || flashDir === 'right') && styles.likeGlow
-        ]}>
-          <Text style={[
-            styles.likeText,
-            (swipeDir === 'right' || flashDir === 'right') && styles.whiteText
-          ]}>❤️</Text>
-        </View>
-
-      </View>
+      <FooterControls
+  swipeDir={swipeDir}
+  flashDir={flashDir}
+  insets={insets}
+  setShowSummary={setShowSummary}
+/>
     </SafeAreaView>
   );
 }

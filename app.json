@@ -23,7 +23,9 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "publicPath": "/PawsAndPreferences/dist/",
+      "bundler": "metro"  
     }
   }
 }
