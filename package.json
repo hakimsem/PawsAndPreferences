@@ -28,5 +28,12 @@
   "private": true,
   "devDependencies": {
     "gh-pages": "^6.3.0"
+  },
+  "expo": {
+    "name": "PawsAndPreferences",
+    "slug": "PawsAndPreferences",
+    "web": {
+      "output": "static"
+    }
   }
 }
