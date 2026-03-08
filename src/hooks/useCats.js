@@ -11,7 +11,7 @@ function useCats() {
   const fetchCats = async () => {
     try {
       const response = await fetch(
-        'https://cataas.com/api/cats?limit=100'
+        'https://cataas.com/api/cats?limit=20'
       );
 
       const data = await response.json();
